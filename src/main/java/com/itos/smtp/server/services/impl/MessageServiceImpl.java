@@ -3,6 +3,7 @@ package com.itos.smtp.server.services.impl;
 import com.itos.smtp.server.models.Email;
 import com.itos.smtp.server.services.MessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -20,9 +21,11 @@ import java.util.regex.Pattern;
 public class MessageServiceImpl implements MessageService {
 
     private static final Pattern SUBJECT_PATTERN = Pattern.compile("^Subject: (.*)$");
-    private static final String SAVE_PATH = "/"; // todo move this parameter to cli properties
     private static final SimpleDateFormat HASH_DATE_FORMAT = new SimpleDateFormat("ddMMyyhhmmssSSS");
     private static final String EML_FILE_SUFFIX = ".eml";
+
+    @Value("${smtp.server.outputDirectory}")
+    private String outputPath;
 
     /**
      * {@inheritDoc}
@@ -77,7 +80,7 @@ public class MessageServiceImpl implements MessageService {
      * @param email The email data
      */
     private void saveEmailContentToFile(Email email) {
-        String filePath = String.format("%s%s%s", SAVE_PATH, File.separator, email.getHash());
+        String filePath = String.format("%s%s%s", outputPath, File.separator, email.getHash());
         File file = createUniqueFile(filePath);
 
         try {
