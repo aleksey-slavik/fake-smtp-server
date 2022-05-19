@@ -26,11 +26,15 @@
             <artifactId>picocli-spring-boot-starter</artifactId>
             <version>4.6.3</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <version>3.1.7</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
