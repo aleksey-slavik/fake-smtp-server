@@ -11,9 +11,9 @@ public interface MessageService {
     /**
      * Saves incoming email on the local storage
      *
-     * @param from      The sender email
-     * @param to        The recipient email
+     * @param sender    The sender email
+     * @param recipient The recipient email
      * @param emailData The email data
      */
-    void saveEmail(String from, String to, InputStream emailData) throws IOException;
+    void saveEmail(String sender, String recipient, InputStream emailData) throws IOException;
 }

@@ -28,13 +28,13 @@ public class MessageServiceImpl implements MessageService {
      * {@inheritDoc}
      */
     @Override
-    public void saveEmail(String from, String to, InputStream emailData) throws IOException {
+    public void saveEmail(String sender, String recipient, InputStream emailData) throws IOException {
 
         byte[] content = emailData.readAllBytes();
 
         Email email = Email.builder()
-                .from(from)
-                .to(to)
+                .sender(sender)
+                .recipient(recipient)
                 .subject(extractSubject(content))
                 .content(content)
                 .received(new Date())

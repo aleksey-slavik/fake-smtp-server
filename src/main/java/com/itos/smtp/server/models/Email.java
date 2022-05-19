@@ -16,8 +16,8 @@ import java.util.Date;
 @Getter
 public class Email {
 
-    private String from;
-    private String to;
+    private String sender;
+    private String recipient;
     private String subject;
     private byte[] content;
     private Date received;
