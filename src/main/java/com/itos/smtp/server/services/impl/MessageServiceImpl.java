@@ -32,7 +32,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void saveEmail(String sender, String recipient, InputStream emailData) throws IOException {
-
+        log.info("Email received. From: {}; To: {}", sender, recipient);
         byte[] content = emailData.readAllBytes();
 
         Email email = Email.builder()
@@ -85,6 +85,7 @@ public class MessageServiceImpl implements MessageService {
 
         try {
             Files.write(file.toPath(), email.getContent());
+            log.info("Email successfully saved at: {}", file.getPath());
         } catch (IOException e) {
             log.error("Cannot write email content to file.");
         }
@@ -100,6 +101,7 @@ public class MessageServiceImpl implements MessageService {
     private File createUniqueFile(String filePath) {
         int i = 0;
         File file = new File(filePath + EML_FILE_SUFFIX);
+        file.getParentFile().mkdirs();
 
         while (file.exists()) {
             file = new File(filePath + i + EML_FILE_SUFFIX);
