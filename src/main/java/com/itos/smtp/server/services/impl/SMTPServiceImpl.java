@@ -24,9 +24,9 @@ public class SMTPServiceImpl implements SMTPService {
      * {@inheritDoc}
      */
     @Override
-    public void start(int port, InetAddress bindAddress) {
+    public void start(InetAddress host, int port) {
         log.info("Starting SMTP server on port {}", port);
-        smtpServer.setBindAddress(bindAddress);
+        smtpServer.setBindAddress(host);
         smtpServer.setPort(port);
         smtpServer.start();
         log.info("SMTP server successfully started.");

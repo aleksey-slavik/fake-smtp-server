@@ -3,6 +3,7 @@ package com.itos.smtp.server.services.impl;
 import com.itos.smtp.server.models.Email;
 import com.itos.smtp.server.services.MessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -20,16 +21,18 @@ import java.util.regex.Pattern;
 public class MessageServiceImpl implements MessageService {
 
     private static final Pattern SUBJECT_PATTERN = Pattern.compile("^Subject: (.*)$");
-    private static final String SAVE_PATH = "/"; // todo move this parameter to cli properties
     private static final SimpleDateFormat HASH_DATE_FORMAT = new SimpleDateFormat("ddMMyyhhmmssSSS");
     private static final String EML_FILE_SUFFIX = ".eml";
+
+    @Value("${smtp.server.outputDirectory}")
+    private String outputPath;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void saveEmail(String sender, String recipient, InputStream emailData) throws IOException {
-
+        log.info("Email received. From: {}; To: {}", sender, recipient);
         byte[] content = emailData.readAllBytes();
 
         Email email = Email.builder()
@@ -77,11 +80,12 @@ public class MessageServiceImpl implements MessageService {
      * @param email The email data
      */
     private void saveEmailContentToFile(Email email) {
-        String filePath = String.format("%s%s%s", SAVE_PATH, File.separator, email.getHash());
+        String filePath = String.format("%s%s%s", outputPath, File.separator, email.getHash());
         File file = createUniqueFile(filePath);
 
         try {
             Files.write(file.toPath(), email.getContent());
+            log.info("Email successfully saved at: {}", file.getPath());
         } catch (IOException e) {
             log.error("Cannot write email content to file.");
         }
@@ -97,6 +101,7 @@ public class MessageServiceImpl implements MessageService {
     private File createUniqueFile(String filePath) {
         int i = 0;
         File file = new File(filePath + EML_FILE_SUFFIX);
+        file.getParentFile().mkdirs();
 
         while (file.exists()) {
             file = new File(filePath + i + EML_FILE_SUFFIX);

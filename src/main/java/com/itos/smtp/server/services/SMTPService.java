@@ -10,10 +10,10 @@ public interface SMTPService {
     /**
      * Starts the local SMTP server
      *
-     * @param port        The SMTP server port
-     * @param bindAddress The SMTP sever address
+     * @param host The SMTP sever address
+     * @param port The SMTP server port
      */
-    void start(int port, InetAddress bindAddress);
+    void start(InetAddress host, int port);
 
     /**
      * Stops the local SMTP server
